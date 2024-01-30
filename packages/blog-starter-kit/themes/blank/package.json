@@ -1,5 +1,5 @@
 {
-	"name": "@starter-kit/blog-personal",
+	"name": "@starter-kit/blank-theme",
 	"private": true,
 	"scripts": {
 		"build": "next build",
