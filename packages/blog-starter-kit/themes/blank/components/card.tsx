@@ -1,22 +1,18 @@
 import Link from 'next/link';
-import { User } from '../generated/graphql';
 import { DateFormatter } from './date-formatter';
-
-type Author = Pick<User, 'name'>;
 
 type Props = {
 	title: string;
 	date: string;
-	author: Author;
 	slug: string;
 	commentCount: number;
 };
 
-export const MinimalPostPreview = ({ title, date, slug, commentCount }: Props) => {
+export const Card = ({ title, date, slug, commentCount }: Props) => {
 	const postURL = `/${slug}`;
 
 	return (
-		<section className="flex flex-col items-start gap-1">
+		<div className="flex flex-col items-start gap-1">
 			<h2 className="text-lg leading-tight tracking-tight text-black dark:text-white">
 				<Link href={postURL}>{title}</Link>
 			</h2>
@@ -33,6 +29,6 @@ export const MinimalPostPreview = ({ title, date, slug, commentCount }: Props) =
 					</>
 				)}
 			</p>
-		</section>
+		</div>
 	);
 };

@@ -1,7 +1,7 @@
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { resizeImage } from '@starter-kit/utils/image';
 import Link from 'next/link';
 import { PublicationNavbarItem } from '../generated/graphql';
+import { Container } from './container';
 import { useAppContext } from './contexts/appContext';
 
 function hasUrl(
@@ -10,7 +10,7 @@ function hasUrl(
 	return !!navbarItem.url && navbarItem.url.length > 0;
 }
 
-export const PersonalHeader = () => {
+export const Header = () => {
 	const { publication } = useAppContext();
 
 	const navbarItems = publication.preferences.navbarItems.filter(hasUrl);
@@ -60,38 +60,27 @@ export const PersonalHeader = () => {
 	);
 
 	return (
-		<header className="grid grid-cols-2 items-center gap-5 ">
-			<div className="col-span-full md:col-span-1">
+		<header>
+			<Container>
 				<h1>
 					<Link
-						className="flex flex-row items-center gap-2 text-lg font-bold leading-tight tracking-tight text-black dark:text-white"
+						className="flex flex-row items-center gap-2 text-xl font-bold leading-tight tracking-tight text-black dark:text-white"
 						href="/"
 						aria-label={`${publication.author.name}'s blog home page`}
 					>
-						{publication.author.profilePicture && (
-							<img
-								className="block h-8 w-8 rounded-full fill-current"
-								alt={publication.author.name}
-								src={resizeImage(publication.author.profilePicture, {
-									w: 400,
-									h: 400,
-									c: 'face',
-								})}
-							/>
-						)}
 						{publication.title}
 					</Link>
 				</h1>
-			</div>
-			<div className="col-span-full flex flex-row items-center justify-between gap-4 md:col-span-1 md:justify-end">
-				<nav>{navList}</nav>
-				{/* <Button
+				<div className="col-span-full flex flex-row items-center justify-between gap-4 md:col-span-1 md:justify-end">
+					<nav>{navList}</nav>
+					{/* <Button
           label=""
           type="outline"
           className="!p-2"
           icon={<NewsletterPlusSVG className="w-5 h-5 fill-current" />}
         /> */}
-			</div>
+				</div>
+			</Container>
 		</header>
 	);
 };
