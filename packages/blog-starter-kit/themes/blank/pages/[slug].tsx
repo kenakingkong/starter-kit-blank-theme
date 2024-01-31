@@ -8,16 +8,11 @@ import { loadIframeResizer } from '@starter-kit/utils/renderer/services/embed';
 import request from 'graphql-request';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Container } from '../components/container';
 import { AppProvider } from '../components/contexts/appContext';
-import { CoverImage } from '../components/cover-image';
-import { DateFormatter } from '../components/date-formatter';
 import { Footer } from '../components/footer';
 import { Layout } from '../components/layout';
 import { MarkdownToHtml } from '../components/markdown-to-html';
-import { PersonalHeader } from '../components/personal-theme-header';
 import {
 	PageByPublicationDocument,
 	PostFullFragment,
@@ -28,6 +23,8 @@ import {
 } from '../generated/graphql';
 // @ts-ignore
 import { triggerCustomWidgetEmbed } from '@starter-kit/utils/trigger-custom-widget-embed';
+import { Header } from '../components/header';
+import { PostHeader } from '../components/post-header';
 
 type PostProps = {
 	type: 'post';
@@ -49,16 +46,6 @@ const Post = ({ publication, post }: PostProps) => {
 	const [, setMobMount] = useState(false);
 	const [canLoadEmbeds, setCanLoadEmbeds] = useState(false);
 	useEmbeds({ enabled: canLoadEmbeds });
-	const tagsList = (post.tags ?? []).map((tag) => (
-		<li key={tag.id}>
-			<Link
-				href={`/tag/${tag.slug}`}
-				className="block rounded-full border px-2 py-1 font-medium hover:bg-slate-50 dark:border-neutral-800 dark:hover:bg-neutral-800 md:px-4"
-			>
-				#{tag.slug}
-			</Link>
-		</li>
-	));
 
 	if (post.hasLatexInPost) {
 		setTimeout(() => {
@@ -93,7 +80,7 @@ const Post = ({ publication, post }: PostProps) => {
 		: undefined;
 
 	return (
-		<>
+		<article>
 			<Head>
 				<title>{post.seo?.title || post.title}</title>
 				<link rel="canonical" href={post.url} />
@@ -128,36 +115,25 @@ const Post = ({ publication, post }: PostProps) => {
 				/>
 				<style dangerouslySetInnerHTML={{ __html: highlightJsMonokaiTheme }}></style>
 			</Head>
-			<h1 className="text-4xl leading-tight tracking-tight text-black dark:text-white">
-				{post.title}
-			</h1>
-			<div className="text-neutral-600 dark:text-neutral-400">
-				<DateFormatter dateString={post.publishedAt} />
+			<PostHeader post={post} />
+			<div className="box-lg">
+				<MarkdownToHtml contentMarkdown={post.content.markdown} />
 			</div>
-			{!!coverImageSrc && (
-				<div className="w-full">
-					<CoverImage title={post.title} priority={true} src={coverImageSrc} />
-				</div>
-			)}
-			<MarkdownToHtml contentMarkdown={post.content.markdown} />
-			{(post.tags ?? []).length > 0 && (
-				<div className="mx-auto w-full text-slate-600 dark:text-neutral-300 md:max-w-screen-md">
-					<ul className="flex flex-row flex-wrap items-center gap-2">{tagsList}</ul>
-				</div>
-			)}
-		</>
+		</article>
 	);
 };
 
 const Page = ({ page }: PageProps) => {
 	const title = page.title;
 	return (
-		<>
+		<article>
 			<Head>
 				<title>{title}</title>
 			</Head>
-			<MarkdownToHtml contentMarkdown={page.content.markdown} />
-		</>
+			<div className="box-lg">
+				<MarkdownToHtml contentMarkdown={page.content.markdown} />
+			</div>
+		</article>
 	);
 };
 
@@ -168,14 +144,12 @@ export default function PostOrPage(props: Props) {
 	return (
 		<AppProvider publication={publication} post={maybePost}>
 			<Layout>
-				<Container className="mx-auto flex max-w-3xl flex-col items-stretch gap-10 px-5 py-10">
-					<PersonalHeader />
-					<article className="flex flex-col items-start gap-10 pb-10">
-						{props.type === 'post' && <Post {...props} />}
-						{props.type === 'page' && <Page {...props} />}
-					</article>
-					<Footer />
-				</Container>
+				<Header />
+
+				{props.type === 'post' && <Post {...props} />}
+				{props.type === 'page' && <Page {...props} />}
+
+				<Footer />
 			</Layout>
 		</AppProvider>
 	);

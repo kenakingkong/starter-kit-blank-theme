@@ -1,34 +1,49 @@
+import classNames from 'classnames';
 import Link from 'next/link';
+import { PostFragment } from '../generated/graphql';
 import { DateFormatter } from './date-formatter';
 
 type Props = {
-	title: string;
-	date: string;
-	slug: string;
-	commentCount: number;
+	post: PostFragment;
 };
 
-export const Card = ({ title, date, slug, commentCount }: Props) => {
+export const Card = ({
+	post: {
+		title,
+		publishedAt,
+		slug,
+		coverImage,
+		comments: { totalDocuments: totalComments },
+	},
+}: Props) => {
 	const postURL = `/${slug}`;
 
+	const hasImage = !!coverImage?.url;
+
 	return (
-		<div className="flex flex-col items-start gap-1">
-			<h2 className="text-lg leading-tight tracking-tight text-black dark:text-white">
-				<Link href={postURL}>{title}</Link>
-			</h2>
-			<p className="flex flex-row items-center gap-2">
-				<Link href={postURL} className="text-sm text-neutral-600 dark:text-neutral-400">
-					<DateFormatter dateString={date} />
-				</Link>
-				{commentCount > 2 && (
-					<>
-						<span>&middot;</span>
-						<Link href={postURL} className="text-sm text-neutral-600 dark:text-neutral-400">
-							{commentCount} comments
-						</Link>
-					</>
-				)}
-			</p>
-		</div>
+		<Link href={postURL} title={title} className="group">
+			<div className={classNames('h-40', hasImage && 'grid md:grid-cols-3')}>
+				{hasImage && <img src={coverImage.url} className="box h-full w-full object-cover" />}
+				<div
+					className={classNames(
+						'box-sm flex h-full flex-col justify-between',
+						hasImage && 'col-span-2',
+					)}
+				>
+					<h2 className="dark-group-hover:text-purple-100 text-xl font-bold transition-all group-hover:text-purple-600">
+						{title}
+					</h2>
+					<p className="flex flex-row items-center gap-2">
+						<DateFormatter dateString={publishedAt} />
+						{totalComments > 2 && (
+							<>
+								<span>&middot;</span>
+								{totalComments} comments
+							</>
+						)}
+					</p>
+				</div>
+			</div>
+		</Link>
 	);
 };
