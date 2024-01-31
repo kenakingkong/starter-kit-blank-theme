@@ -15,7 +15,7 @@ export const Header = () => {
 
 	return (
 		<header>
-			<nav className="box-sm flex items-center gap-6">
+			<nav className="w-full box-sm flex items-center gap-6">
 				<h1 className="text-lg leading-none md:text-2xl font-bold">
 					<Link href="/" aria-label={`${publication.author.name}'s blog home page`}>
 						{publication.title}

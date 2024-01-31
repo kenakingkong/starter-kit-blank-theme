@@ -20,7 +20,7 @@ export const LargeCard = ({
 	const postURL = `/${slug}`;
 	return (
 		<Link href={postURL} title={title} className="group">
-			<div className="grid h-[75vh] md:grid-cols-2">
+			<div className="grid min-h-[75vh] md:grid-cols-2">
 				{coverImage?.url ? (
 					<img src={coverImage?.url} className="h-full w-full box object-cover" />
 				) : (
