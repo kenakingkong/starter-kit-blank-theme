@@ -7,15 +7,7 @@ type Props = {
 	post: PostFragment;
 };
 
-export const Card = ({
-	post: {
-		title,
-		publishedAt,
-		slug,
-		coverImage,
-		comments: { totalDocuments: totalComments },
-	},
-}: Props) => {
+export const Card = ({ post: { title, publishedAt, author, slug, coverImage } }: Props) => {
 	const postURL = `/${slug}`;
 
 	const hasImage = !!coverImage?.url;
@@ -30,17 +22,12 @@ export const Card = ({
 						hasImage && 'col-span-2',
 					)}
 				>
-					<h2 className="dark-group-hover:text-purple-100 text-xl font-bold transition-all group-hover:text-purple-600">
+					<h2 className="dark-group-hover:text-purple-100 text-lg md:text-xl md:leading-none font-bold transition-all group-hover:text-purple-600">
 						{title}
 					</h2>
-					<p className="flex flex-row items-center gap-2">
+					<p className="flex flex-row items-center gap-2 text-sm font-light">
+						<p>By {author.name}</p>|
 						<DateFormatter dateString={publishedAt} />
-						{totalComments > 2 && (
-							<>
-								<span>&middot;</span>
-								{totalComments} comments
-							</>
-						)}
 					</p>
 				</div>
 			</div>

@@ -7,15 +7,7 @@ type Props = {
 };
 
 export const PostHeader = ({
-	post: {
-		title,
-		publishedAt,
-		author,
-		coverImage,
-		slug,
-		tags,
-		comments: { totalDocuments: totalComments },
-	},
+	post: { title, publishedAt, author, coverImage, slug, tags },
 }: Props) => {
 	const postURL = `/${slug}`;
 	const hasImage = !!coverImage?.url;
@@ -25,20 +17,14 @@ export const PostHeader = ({
 				<img src={coverImage?.url} className="box h-full w-full object-cover" />
 			)}
 			<div className="box-lg h-full">
-				<div className="flex h-full w-full flex-col justify-start gap-3 md:max-w-screen-md md:mx-auto">
-					<h2 className="text-5xl font-bold leading-none transition-all md:text-7xl">{title}</h2>
-					<p className="flex grow flex-row items-center justify-start gap-2">
+				<div className="flex h-full w-full flex-col justify-start gap-3 md:mx-auto md:max-w-screen-md">
+					<h2 className="text-5xl font-bold transition-all md:text-7xl md:leading-none">{title}</h2>
+					<p className="flex flex-row items-center justify-start gap-2">
 						<p>By {author.name}</p>|
-						<DateFormatter dateString={publishedAt} />|
-						{totalComments > 0 && (
-							<>
-								<span>&middot;</span>
-								{totalComments} comments
-							</>
-						)}
+						<DateFormatter dateString={publishedAt} />
 					</p>
 					{!!tags && tags.length > 0 && (
-						<ul className="flex flex-row flex-wrap items-center gap-2">
+						<ul className="flex flex-row flex-wrap items-end grow gap-2">
 							{tags.map((tag) => (
 								<li key={tag.id}>#{tag.slug}</li>
 							))}

@@ -16,14 +16,12 @@ export const Cards = ({ posts }: Props) => {
 	const mainPost = posts[0];
 	const restPosts = posts.slice(1, totalPosts);
 
-	// 5 ->
-
 	return (
 		<>
 			<section>
 				<LargeCard post={mainPost} />
 			</section>
-			<section className="grid grid-cols-3">
+			<section className="grid grid-cols-1 md:grid-cols-2 ">
 				{restPosts.map((post) => (
 					<Card key={post.id} post={post} />
 				))}
